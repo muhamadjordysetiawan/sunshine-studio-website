@@ -1,0 +1,257 @@
+.information-page {
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+.info-hero {
+  background: linear-gradient(135deg, var(--black) 0%, var(--gray-dark) 100%);
+  padding: 4rem 2rem;
+  text-align: center;
+  border-bottom: 2px solid var(--yellow);
+}
+
+.info-hero h1 {
+  font-size: 3rem;
+  color: var(--yellow);
+  margin-bottom: 1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.info-hero p {
+  font-size: 1.2rem;
+  color: var(--white);
+  opacity: 0.9;
+}
+
+.info-container {
+  max-width: 1200px;
+  padding: 3rem 2rem;
+}
+
+.info-section {
+  margin-bottom: 3rem;
+}
+
+.info-section h2 {
+  font-size: 2rem;
+  color: var(--yellow);
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.info-card {
+  background: var(--gray-dark);
+  border: 2px solid var(--gray-light);
+  border-radius: 15px;
+  padding: 2.5rem;
+  transition: all 0.3s ease;
+}
+
+.info-card:hover {
+  border-color: var(--yellow);
+  box-shadow: 0 10px 30px rgba(255, 215, 0, 0.1);
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--gray-light);
+  color: var(--white);
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-item strong {
+  color: var(--yellow);
+  font-weight: 600;
+}
+
+.venue-details h3 {
+  color: var(--yellow);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.venue-details p {
+  color: var(--white);
+  opacity: 0.9;
+  margin-bottom: 0.5rem;
+}
+
+.venue-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--gray-light);
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--white);
+  opacity: 0.9;
+}
+
+.feature .icon {
+  font-size: 1.5rem;
+}
+
+.ticket-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.ticket-info-item {
+  background: var(--black);
+  padding: 1.5rem;
+  border-radius: 10px;
+  border: 1px solid var(--gray-light);
+}
+
+.ticket-info-item h4 {
+  color: var(--yellow);
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.ticket-info-item .price {
+  font-size: 2rem;
+  color: var(--yellow);
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.ticket-info-item ul {
+  list-style: none;
+  padding: 0;
+}
+
+.ticket-info-item ul li {
+  color: var(--white);
+  opacity: 0.9;
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.ticket-info-item ul li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--yellow);
+  font-weight: 700;
+}
+
+.expectation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.expectation-item {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.expectation-icon {
+  font-size: 3rem;
+  flex-shrink: 0;
+}
+
+.expectation-item h4 {
+  color: var(--yellow);
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.expectation-item p {
+  color: var(--white);
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.contact-item h4 {
+  color: var(--yellow);
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.contact-item p {
+  color: var(--white);
+  opacity: 0.9;
+  margin-bottom: 0.5rem;
+}
+
+.notes-list {
+  list-style: none;
+  padding: 0;
+}
+
+.notes-list li {
+  color: var(--white);
+  opacity: 0.9;
+  padding: 1rem 0;
+  padding-left: 2rem;
+  position: relative;
+  line-height: 1.6;
+  border-bottom: 1px solid var(--gray-light);
+}
+
+.notes-list li:last-child {
+  border-bottom: none;
+}
+
+.notes-list li::before {
+  content: '⚠️';
+  position: absolute;
+  left: 0;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .info-hero h1 {
+    font-size: 2rem;
+  }
+
+  .info-card {
+    padding: 1.5rem;
+  }
+
+  .info-item {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .ticket-info-grid,
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .expectation-item {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+

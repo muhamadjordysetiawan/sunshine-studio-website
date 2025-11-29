@@ -1,0 +1,296 @@
+.tickets-page {
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+.tickets-hero {
+  background: linear-gradient(135deg, var(--black) 0%, var(--gray-dark) 100%);
+  padding: 4rem 2rem;
+  text-align: center;
+  border-bottom: 2px solid var(--yellow);
+}
+
+.tickets-hero h1 {
+  font-size: 3rem;
+  color: var(--yellow);
+  margin-bottom: 1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.tickets-hero p {
+  font-size: 1.2rem;
+  color: var(--white);
+  opacity: 0.9;
+}
+
+.tickets-container {
+  padding: 3rem 2rem;
+}
+
+.tickets-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.ticket-selection h2,
+.checkout-section h2 {
+  font-size: 2rem;
+  color: var(--yellow);
+  margin-bottom: 2rem;
+  font-weight: 700;
+}
+
+.ticket-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.ticket-card {
+  background: var(--gray-dark);
+  border: 2px solid var(--gray-light);
+  border-radius: 15px;
+  padding: 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ticket-card:hover {
+  border-color: var(--yellow);
+  transform: translateX(10px);
+}
+
+.ticket-card.selected {
+  border-color: var(--yellow);
+  background: rgba(255, 215, 0, 0.1);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.ticket-header h3 {
+  font-size: 1.8rem;
+  color: var(--yellow);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.ticket-price {
+  font-size: 2rem;
+  color: var(--yellow);
+  font-weight: 800;
+}
+
+.ticket-description {
+  color: var(--white);
+  opacity: 0.9;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.ticket-features {
+  list-style: none;
+  padding: 0;
+}
+
+.ticket-features li {
+  color: var(--white);
+  padding: 0.5rem 0;
+  opacity: 0.8;
+}
+
+.quantity-selector {
+  background: var(--gray-dark);
+  padding: 2rem;
+  border-radius: 15px;
+  border: 2px solid var(--yellow);
+}
+
+.quantity-selector label {
+  display: block;
+  color: var(--yellow);
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.qty-btn {
+  width: 40px;
+  height: 40px;
+  background: var(--yellow);
+  color: var(--black);
+  font-size: 1.5rem;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.qty-btn:hover {
+  background: var(--yellow-dark);
+  transform: scale(1.1);
+}
+
+.quantity {
+  font-size: 1.5rem;
+  color: var(--white);
+  font-weight: 600;
+  min-width: 50px;
+  text-align: center;
+}
+
+.subtotal {
+  font-size: 1.3rem;
+  color: var(--white);
+  font-weight: 600;
+  text-align: right;
+}
+
+.subtotal span {
+  color: var(--yellow);
+  font-size: 1.5rem;
+}
+
+.checkout-section {
+  background: var(--gray-dark);
+  padding: 2.5rem;
+  border-radius: 15px;
+  border: 2px solid var(--gray-light);
+}
+
+.checkout-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  color: var(--yellow);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select {
+  padding: 1rem;
+  background: var(--black);
+  border: 2px solid var(--gray-light);
+  border-radius: 8px;
+  color: var(--white);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--yellow);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.card-details {
+  background: var(--black);
+  padding: 1.5rem;
+  border-radius: 10px;
+  border: 1px solid var(--gray-light);
+}
+
+.order-summary {
+  background: var(--black);
+  padding: 1.5rem;
+  border-radius: 10px;
+  border: 2px solid var(--yellow);
+  margin-top: 1rem;
+}
+
+.order-summary h3 {
+  color: var(--yellow);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  color: var(--white);
+  padding: 0.5rem 0;
+  opacity: 0.9;
+}
+
+.summary-row.total {
+  border-top: 2px solid var(--yellow);
+  padding-top: 1rem;
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--yellow);
+}
+
+.no-selection {
+  color: var(--white);
+  opacity: 0.7;
+  text-align: center;
+  padding: 1rem;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 1024px) {
+  .tickets-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .tickets-hero h1 {
+    font-size: 2rem;
+  }
+
+  .ticket-card {
+    padding: 1.5rem;
+  }
+
+  .checkout-section {
+    padding: 1.5rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
