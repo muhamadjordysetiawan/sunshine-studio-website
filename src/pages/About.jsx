@@ -1,4 +1,13 @@
 import './About.css'
+// Import foto leadership team
+import jamesonPhoto from '../assets/leadership/jameson.jpg'
+import wonderkidPhoto from '../assets/leadership/wonderkid.jpg'
+import zuluPhoto from '../assets/leadership/zulu.jpg'
+// Import foto team members
+import ezapPhoto from '../assets/team/ezap.jpg'
+import arasmythPhoto from '../assets/team/arasmyth.jpg'
+import fikriPhoto from '../assets/team/fikri.jpg'
+import zilongPhoto from '../assets/team/zilong.jpg'
 
 const About = () => {
   return (
@@ -15,69 +24,24 @@ const About = () => {
           <div className="about-content">
             <h2>Our Story</h2>
             <p>
-              Sunshine Studio was founded with a vision to create extraordinary theater experiences 
-              that touch hearts and inspire minds. We believe in the transformative power of live 
-              performance and the ability of storytelling to connect people across all walks of life.
+              Sunshine Studios adalah komunitas seni yang berfokus pada pertunjukan kabaret dan produksi kreatif. 
+              Dikenal karena tata artistik yang detail, koreografi penuh energi, dan kepekaan visual yang tinggi. 
+              Sunshine Studios lahir dari semangat muda untuk menciptakan karya yang tidak hanya indah, tetapi juga bermakna.
             </p>
             <p>
-              Since our inception, we have been dedicated to producing high-quality theatrical 
-              productions that combine compelling narratives, exceptional talent, and innovative 
-              staging. Our commitment to excellence has earned us recognition as one of the 
-              premier theater companies in the region.
+              Sebuah teater dengan sejarah panjang, berakar pada tradisi seni pertunjukan dan pendidikan karakter. 
+              Lebih dari empat dekade berkarya, Teater Epigonen terus menjadi ruang bagi generasi muda untuk belajar, 
+              berekspresi, dan menciptakan karya yang menggugah rasa.
             </p>
             <p>
-              This January, we are thrilled to present our latest production, a carefully crafted 
-              piece that showcases the depth of our artistic vision and the passion of our 
-              incredible team.
+              World of Fantasy 2.0 hadir sebagai perayaan dari imajinasi, sebuah lanjutan dari kisah yang telah 
+              menghidupkan ribuan rasa pada edisi sebelumnya. Kali ini, kami ingin membawa penonton masuk lebih jauh 
+              ke dalam semesta fantasi — dunia tempat warna, emosi, dan cerita berpadu menjadi satu pengalaman yang memukau.
             </p>
-          </div>
-        </section>
-
-        <section className="mission-section">
-          <h2>Our Mission</h2>
-          <div className="mission-grid">
-            <div className="mission-card">
-              <div className="mission-icon">🎯</div>
-              <h3>Excellence</h3>
-              <p>We strive for excellence in every aspect of our productions, from casting to staging to performance.</p>
-            </div>
-            <div className="mission-card">
-              <div className="mission-icon">❤️</div>
-              <h3>Passion</h3>
-              <p>Our love for theater drives everything we do. We pour our hearts into every show.</p>
-            </div>
-            <div className="mission-card">
-              <div className="mission-icon">🌍</div>
-              <h3>Community</h3>
-              <p>We believe theater brings communities together and creates lasting connections.</p>
-            </div>
-            <div className="mission-card">
-              <div className="mission-icon">✨</div>
-              <h3>Innovation</h3>
-              <p>We embrace new ideas and creative approaches to keep theater fresh and exciting.</p>
-            </div>
-          </div>
-        </section>
-
-        <section className="values-section">
-          <h2>Our Values</h2>
-          <div className="values-content">
-            <div className="value-item">
-              <h3>Artistic Integrity</h3>
-              <p>We maintain the highest standards of artistic integrity in all our work, ensuring that every production is meaningful and authentic.</p>
-            </div>
-            <div className="value-item">
-              <h3>Inclusivity</h3>
-              <p>We are committed to creating an inclusive environment where everyone feels welcome and represented.</p>
-            </div>
-            <div className="value-item">
-              <h3>Collaboration</h3>
-              <p>We believe that great theater is born from collaboration, and we work closely with our entire team to bring visions to life.</p>
-            </div>
-            <div className="value-item">
-              <h3>Accessibility</h3>
-              <p>We strive to make theater accessible to all, offering various ticket options and ensuring our venue is welcoming to everyone.</p>
-            </div>
+            <p>
+              Pagelaran ini bukan hanya pertunjukan. Ia adalah perjalanan emosional, ruang ekspresi, dan wadah untuk 
+              merayakan seni pertunjukan dalam wujud paling magisnya.
+            </p>
           </div>
         </section>
 
@@ -93,6 +57,74 @@ const About = () => {
             <a href="/actors" className="btn btn-primary">
               Meet Our Actors
             </a>
+          </div>
+        </section>
+
+        <section className="leadership-section">
+          <h2>Leadership Team</h2>
+          <div className="leadership-grid">
+            <div className="leader-card featured">
+              <div className="leader-image">
+                <img src={jamesonPhoto} alt="Jameson - CEO" className="leader-photo" />
+              </div>
+              <div className="leader-info">
+                <h3>Jameson</h3>
+                <p className="leader-role">CEO</p>
+                <p className="leader-name">Muhammad Reyhand Alfarrel</p>
+              </div>
+            </div>
+
+            <div className="leader-card featured">
+              <div className="leader-image">
+                <img src={wonderkidPhoto} alt="WonderKid - Creative Director" className="leader-photo" />
+              </div>
+              <div className="leader-info">
+                <h3>WonderKid</h3>
+                <p className="leader-role">Creative Director</p>
+                <p className="leader-name">Nizar Anditia Kurniawan</p>
+              </div>
+            </div>
+
+            <div className="leader-card featured">
+              <div className="leader-image">
+                <img src={zuluPhoto} alt="Zulu - Art Director" className="leader-photo" />
+              </div>
+              <div className="leader-info">
+                <h3>Zulu</h3>
+                <p className="leader-role">Art Director</p>
+                <p className="leader-name">Muhammad Zhafira Pemangku Rahmat</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="other-team-section">
+          <h2>Team</h2>
+          <div className="other-team-grid">
+            <div className="team-member-card">
+              <div className="team-member-image">
+                <img src={ezapPhoto} alt="Ezap" className="team-member-photo" />
+              </div>
+              <h4>Ezap</h4>
+            </div>
+            <div className="team-member-card">
+              <div className="team-member-image">
+                <img src={arasmythPhoto} alt="Arasmyth" className="team-member-photo" />
+              </div>
+              <h4>Arasmyth</h4>
+            </div>
+            <div className="team-member-card">
+              <div className="team-member-image">
+                <img src={fikriPhoto} alt="Fikri" className="team-member-photo" />
+              </div>
+              <h4>Fikri</h4>
+            </div>
+            <div className="team-member-card">
+              <div className="team-member-image">
+                <img src={zilongPhoto} alt="Zilong" className="team-member-photo" />
+              </div>
+              <h4>Zilong</h4>
+            </div>
           </div>
         </section>
 

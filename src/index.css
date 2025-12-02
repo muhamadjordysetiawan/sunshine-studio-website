@@ -6,7 +6,7 @@
 
 :root {
   --black: #000000;
-  --yellow: #ff8d00;
+  --yellow: #b3a27b;
   --yellow-light: #ffa64d;
   --yellow-dark: #cc7000;
   --gray-dark: #1a1a1a;
@@ -33,6 +33,9 @@ body {
   color: var(--white);
   line-height: 1.6;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 #root {
@@ -65,5 +68,37 @@ button {
 
 input, textarea, select {
   font-family: 'Poppins', sans-serif;
+}
+
+/* Touch-friendly improvements */
+button, a, input, select, textarea {
+  -webkit-tap-highlight-color: rgba(255, 215, 0, 0.2);
+  touch-action: manipulation;
+}
+
+/* Prevent text size adjustment on iOS */
+input, select, textarea, button {
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  input, select, textarea, button {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+/* Image optimization */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Smooth animations */
+* {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  perspective: 1000;
 }
 

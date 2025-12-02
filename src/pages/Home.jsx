@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import logo from '../assets/logo.png'
 import './Home.css'
 
 const Home = () => {
@@ -7,9 +8,10 @@ const Home = () => {
       <section className="hero">
         <div className="hero-content">
           <h1 className="hero-title">
-            <span className="highlight">Sunshine Studio</span>
-            <br />
-            Presents
+            <div className="hero-logo-container">
+              <img src={logo} alt="Sunshine Studio" className="hero-logo" loading="eager" />
+            </div>
+            <span className="hero-presents">Presents</span>
           </h1>
           <h2 className="hero-subtitle">World Of Fantasy 2.0</h2>
           <p className="hero-description">

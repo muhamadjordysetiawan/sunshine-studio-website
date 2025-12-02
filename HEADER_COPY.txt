@@ -1,0 +1,3 @@
+Tanggal & Waktu	Nama	Email	Telepon	Tiket	Jumlah	Total	Sesi	Waktu Sesi	Pertunjukan	Metode Pembayaran	Link Bukti Transfer
+
+

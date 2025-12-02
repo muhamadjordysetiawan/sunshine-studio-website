@@ -1,10 +1,12 @@
 .App {
   width: 100%;
+  min-height: 100vh;
 }
 
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Custom scrollbar */
@@ -23,5 +25,34 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--yellow-dark);
+}
+
+/* Performance optimizations */
+.feature-card,
+.actor-card,
+.ticket-card,
+.mission-card,
+.value-item,
+.info-card {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Prevent layout shift */
+.hero-logo,
+.logo-icon,
+.footer-logo-icon {
+  aspect-ratio: auto;
+}
+
+/* Optimize animations for mobile */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 

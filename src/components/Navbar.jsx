@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import logo from '../assets/logo.png'
 import './Navbar.css'
 
 const Navbar = () => {
@@ -12,7 +13,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="nav-container">
         <Link to="/" className="logo">
-          <span className="logo-text">☀️ Sunshine Studio</span>
+          <img src={logo} alt="Sunshine Studios" className="logo-icon" loading="eager" />
         </Link>
         
         <button 

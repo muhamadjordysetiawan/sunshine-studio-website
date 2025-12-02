@@ -1,43 +1,61 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
+import emailjs from '@emailjs/browser'
 import './Tickets.css'
 
 const Tickets = () => {
   const [selectedTicket, setSelectedTicket] = useState(null)
   const [quantity, setQuantity] = useState(1)
+  const [proofFile, setProofFile] = useState(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const fileInputRef = useRef(null)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    paymentMethod: 'card'
+    paymentMethod: 'bca',
+    session: ''
   })
+
+  const sessions = [
+    { id: 1, name: 'Sesi 1 - Rapunzel', time: '09.30 WIB', show: 'Rapunzel' },
+    { id: 2, name: 'Sesi 2 - Aladdin', time: '13.00 WIB', show: 'Aladdin' },
+    { id: 3, name: 'Sesi 3 - Rapunzel', time: '16.00 WIB', show: 'Rapunzel' },
+    { id: 4, name: 'Sesi 4 - Aladdin', time: '19.00 WIB', show: 'Aladdin' }
+  ]
 
   const ticketTypes = [
     {
       id: 1,
-      name: 'VIP',
-      price: 150,
-      description: 'Premium seating with best views, complimentary refreshments, and meet & greet with actors',
-      features: ['Best Seats', 'Meet & Greet', 'Refreshments', 'VIP Badge']
+      name: 'Early Bird',
+      price: 30000,
+      status: 'sold-out'
     },
     {
       id: 2,
-      name: 'Standard',
-      price: 75,
-      description: 'Great seats with excellent view of the stage',
-      features: ['Good Seats', 'Program Booklet', 'Standard Access']
+      name: 'Pre-Sale 1',
+      price: 45000,
+      status: 'available'
     },
     {
       id: 3,
-      name: 'Student',
-      price: 45,
-      description: 'Special pricing for students with valid ID',
-      features: ['Student Seats', 'Program Booklet', 'Student Discount']
+      name: 'Pre-Sale 2',
+      price: 65000,
+      status: 'coming-soon'
+    },
+    {
+      id: 4,
+      name: 'OTS',
+      price: null,
+      status: 'tba'
     }
   ]
 
   const handleTicketSelect = (ticket) => {
-    setSelectedTicket(ticket)
-    setQuantity(1)
+    // Only allow selection if ticket is available
+    if (ticket.status === 'available') {
+      setSelectedTicket(ticket)
+      setQuantity(1)
+    }
   }
 
   const handleInputChange = (e) => {
@@ -47,56 +65,256 @@ const Tickets = () => {
     })
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    if (!selectedTicket) {
-      alert('Please select a ticket type')
-      return
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      // Validate file type
+      if (file.type.startsWith('image/')) {
+        // Validate file size (max 5MB)
+        if (file.size <= 5 * 1024 * 1024) {
+          setProofFile(file)
+        } else {
+          alert('Ukuran file maksimal 5MB')
+          e.target.value = ''
+        }
+      } else {
+        alert('Hanya file gambar yang diperbolehkan')
+        e.target.value = ''
+      }
     }
-    const total = selectedTicket.price * quantity
-    alert(`Thank you for your purchase!\n\nTicket: ${selectedTicket.name}\nQuantity: ${quantity}\nTotal: $${total}\n\nA confirmation email will be sent to ${formData.email}`)
-    // In a real app, you would process the payment here
   }
 
-  const total = selectedTicket ? selectedTicket.price * quantity : 0
+  const formatPrice = (price) => {
+    if (price === null || price === undefined) return 'TBA'
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(price)
+  }
+
+  const convertFileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => resolve(reader.result)
+      reader.onerror = (error) => reject(error)
+    })
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!selectedTicket) {
+      alert('Silakan pilih jenis tiket')
+      return
+    }
+    if (!proofFile) {
+      alert('Silakan upload bukti transfer')
+      return
+    }
+    if (!formData.session) {
+      alert('Silakan pilih sesi pertunjukan')
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      const total = selectedTicket.price * quantity
+      const selectedSession = sessions.find(s => s.id === parseInt(formData.session))
+      const paymentInfo = formData.paymentMethod === 'bca' 
+        ? `Bank BCA\nAtas Nama: Herawati Silalahi\nRekening: 0382123679`
+        : `Dana\nAtas Nama: Herawati Silalahi\nNomor: 081213601297`
+
+      // Convert file to base64
+      const base64Image = await convertFileToBase64(proofFile)
+      
+      // 1. Upload foto dan simpan data ke Google Apps Script
+      const scriptUrl = import.meta.env.VITE_GOOGLE_APPS_SCRIPT_URL
+      
+      if (scriptUrl) {
+        try {
+          // Payload dengan base64 image untuk ditampilkan di Google Sheets
+          const payload = {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            ticketType: selectedTicket.name,
+            quantity: quantity,
+            total: total,
+            session: selectedSession.name,
+            sessionTime: selectedSession.time,
+            show: selectedSession.show,
+            paymentMethod: formData.paymentMethod === 'bca' ? 'BCA' : 'Dana',
+            proofImage: base64Image || '', // Kirim base64 image untuk ditampilkan di Sheets
+            timestamp: new Date().toISOString(),
+          }
+          
+          console.log('Sending to Google Apps Script:', {
+            name: payload.name,
+            email: payload.email,
+            ticketType: payload.ticketType
+          })
+          
+          // Use POST with FormData to handle large base64 images
+          console.log('Sending POST request to Google Apps Script')
+          console.log('Payload size:', JSON.stringify(payload).length, 'characters')
+          console.log('Image data length:', payload.proofImage ? payload.proofImage.length : 0)
+          console.log('Image data preview:', payload.proofImage ? payload.proofImage.substring(0, 100) + '...' : 'no image')
+          
+          // Use FormData to send data (more reliable for Google Apps Script)
+          const formDataToSend = new FormData()
+          formDataToSend.append('data', JSON.stringify(payload))
+          
+          // Use POST method with FormData (can handle large data)
+          fetch(scriptUrl, {
+            method: 'POST',
+            body: formDataToSend,
+            mode: 'no-cors' // No CORS issues
+          }).then(() => {
+            console.log('POST request sent successfully')
+          }).catch(err => {
+            console.error('POST request failed:', err)
+          })
+        } catch (error) {
+          console.error('Error uploading to Google:', error)
+          console.error('Error details:', {
+            message: error.message,
+            stack: error.stack
+          })
+          // Continue even if Google Apps Script fails
+        }
+      } else {
+        console.warn('Google Apps Script URL not configured')
+      }
+
+      // 2. Kirim email konfirmasi menggunakan EmailJS
+      const emailServiceId = import.meta.env.VITE_EMAILJS_SERVICE_ID
+      const emailTemplateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
+      const emailPublicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+
+      console.log('EmailJS Config:', {
+        serviceId: emailServiceId,
+        templateId: emailTemplateId,
+        publicKey: emailPublicKey ? '***' + emailPublicKey.slice(-4) : 'missing'
+      })
+
+      if (emailServiceId && emailTemplateId && emailPublicKey) {
+        try {
+          const emailParams = {
+            to_name: formData.name,
+            to_email: formData.email,
+            ticket_type: selectedTicket.name,
+            quantity: quantity.toString(),
+            total: formatPrice(total),
+            session: selectedSession.name,
+            session_time: selectedSession.time,
+            show: selectedSession.show,
+            payment_method: formData.paymentMethod === 'bca' ? 'BCA' : 'Dana',
+            payment_info: paymentInfo,
+          }
+
+          console.log('Sending email with params:', emailParams)
+          const emailResult = await emailjs.send(emailServiceId, emailTemplateId, emailParams, emailPublicKey)
+          console.log('Email sent successfully:', emailResult)
+        } catch (error) {
+          console.error('Error sending email:', error)
+          console.error('Error details:', {
+            text: error.text,
+            status: error.status,
+            message: error.message
+          })
+          alert(`Email gagal terkirim. Error: ${error.text || error.message}. Silakan cek console untuk detail.`)
+        }
+      } else {
+        console.warn('EmailJS credentials missing:', {
+          serviceId: !emailServiceId,
+          templateId: !emailTemplateId,
+          publicKey: !emailPublicKey
+        })
+        alert('EmailJS credentials belum diisi dengan lengkap. Silakan cek file .env')
+      }
+
+      // Show success message
+      const emailStatus = emailServiceId && emailTemplateId && emailPublicKey 
+        ? 'Email konfirmasi telah dikirim ke ' + formData.email
+        : 'Catatan: EmailJS belum dikonfigurasi dengan lengkap'
+      
+      alert(`Terima kasih atas pembelian Anda!\n\nTiket: ${selectedTicket.name}\nJumlah: ${quantity}\nSesi: ${selectedSession.name} - ${selectedSession.time}\nTotal: ${formatPrice(total)}\n\n${emailStatus}`)
+      
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        paymentMethod: 'bca',
+        session: ''
+      })
+      setSelectedTicket(null)
+      setQuantity(1)
+      setProofFile(null)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+    } catch (error) {
+      console.error('Error:', error)
+      alert('Terjadi kesalahan saat memproses pembayaran. Silakan coba lagi atau hubungi kami.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const total = selectedTicket && selectedTicket.price ? selectedTicket.price * quantity : 0
 
   return (
     <div className="tickets-page">
       <div className="tickets-hero">
         <div className="container">
           <h1>Get Your Tickets</h1>
-          <p>Secure your seat for an unforgettable theater experience</p>
+          <p>Amankan tiketmu sekarang juga, untuk merasakan pengalaman yang tak terlupakan!</p>
         </div>
       </div>
 
       <div className="container tickets-container">
         <div className="tickets-content">
           <section className="ticket-selection">
-            <h2>Choose Your Ticket</h2>
+            <h2>Pilih Tiket Anda</h2>
             <div className="ticket-grid">
-              {ticketTypes.map(ticket => (
-                <div
-                  key={ticket.id}
-                  className={`ticket-card ${selectedTicket?.id === ticket.id ? 'selected' : ''}`}
-                  onClick={() => handleTicketSelect(ticket)}
-                >
-                  <div className="ticket-header">
-                    <h3>{ticket.name}</h3>
-                    <div className="ticket-price">${ticket.price}</div>
+              {ticketTypes.map(ticket => {
+                const isDisabled = ticket.status !== 'available'
+                return (
+                  <div
+                    key={ticket.id}
+                    className={`ticket-card ${selectedTicket?.id === ticket.id ? 'selected' : ''} ${isDisabled ? 'disabled' : ''}`}
+                    onClick={() => !isDisabled && handleTicketSelect(ticket)}
+                  >
+                    <div className="ticket-header">
+                      <h3>{ticket.name}</h3>
+                      <div className="ticket-price">{formatPrice(ticket.price)}</div>
+                    </div>
+                    <div className="ticket-status">
+                      {ticket.status === 'sold-out' && (
+                        <span className="status-badge sold-out">SOLD OUT</span>
+                      )}
+                      {ticket.status === 'coming-soon' && (
+                        <span className="status-badge coming-soon">COMING SOON</span>
+                      )}
+                      {ticket.status === 'tba' && (
+                        <span className="status-badge tba">TO BE ANNOUNCED</span>
+                      )}
+                      {ticket.status === 'available' && (
+                        <span className="status-badge available">AVAILABLE</span>
+                      )}
+                    </div>
                   </div>
-                  <p className="ticket-description">{ticket.description}</p>
-                  <ul className="ticket-features">
-                    {ticket.features.map((feature, idx) => (
-                      <li key={idx}>✓ {feature}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+                )
+              })}
             </div>
 
             {selectedTicket && (
               <div className="quantity-selector">
-                <label>Quantity:</label>
+                <label>Jumlah:</label>
                 <div className="quantity-controls">
                   <button 
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -113,7 +331,7 @@ const Tickets = () => {
                   </button>
                 </div>
                 <div className="subtotal">
-                  Subtotal: <span>${total}</span>
+                  Subtotal: <span>{formatPrice(total)}</span>
                 </div>
               </div>
             )}
@@ -123,102 +341,158 @@ const Tickets = () => {
             <h2>Checkout</h2>
             <form onSubmit={handleSubmit} className="checkout-form">
               <div className="form-group">
-                <label>Full Name *</label>
+                <label>Nama Lengkap *</label>
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
                   required
-                  placeholder="John Doe"
+                  placeholder="Nama Lengkap"
                 />
               </div>
 
               <div className="form-group">
-                <label>Email Address *</label>
+                <label>Alamat Email *</label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
                   required
-                  placeholder="john@example.com"
+                  placeholder="nama@email.com"
                 />
               </div>
 
               <div className="form-group">
-                <label>Phone Number *</label>
+                <label>Nomor Telepon *</label>
                 <input
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
                   required
-                  placeholder="+1 (555) 123-4567"
+                  placeholder="081234567890"
                 />
               </div>
 
               <div className="form-group">
-                <label>Payment Method *</label>
+                <label>Pilih Sesi Pertunjukan *</label>
+                <select
+                  name="session"
+                  value={formData.session}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">Pilih Sesi</option>
+                  {sessions.map(session => (
+                    <option key={session.id} value={session.id}>
+                      {session.name} - {session.time}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>Metode Pembayaran *</label>
                 <select
                   name="paymentMethod"
                   value={formData.paymentMethod}
                   onChange={handleInputChange}
                   required
                 >
-                  <option value="card">Credit/Debit Card</option>
-                  <option value="paypal">PayPal</option>
-                  <option value="bank">Bank Transfer</option>
+                  <option value="bca">Transfer Bank BCA</option>
+                  <option value="dana">Dana</option>
                 </select>
               </div>
 
-              {formData.paymentMethod === 'card' && (
-                <div className="card-details">
-                  <div className="form-group">
-                    <label>Card Number</label>
-                    <input
-                      type="text"
-                      placeholder="1234 5678 9012 3456"
-                      maxLength="19"
-                    />
-                  </div>
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label>Expiry Date</label>
-                      <input type="text" placeholder="MM/YY" maxLength="5" />
+              <div className="payment-info">
+                {formData.paymentMethod === 'bca' && (
+                  <div className="payment-details">
+                    <h4>Informasi Rekening Bank BCA</h4>
+                    <div className="payment-item">
+                      <span className="payment-label">Bank:</span>
+                      <span className="payment-value">BCA (Bank Central Asia)</span>
                     </div>
-                    <div className="form-group">
-                      <label>CVV</label>
-                      <input type="text" placeholder="123" maxLength="3" />
+                    <div className="payment-item">
+                      <span className="payment-label">Atas Nama:</span>
+                      <span className="payment-value">Herawati Silalahi</span>
+                    </div>
+                    <div className="payment-item">
+                      <span className="payment-label">Nomor Rekening:</span>
+                      <span className="payment-value payment-number">0382123679</span>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+
+                {formData.paymentMethod === 'dana' && (
+                  <div className="payment-details">
+                    <h4>Informasi Akun Dana</h4>
+                    <div className="payment-item">
+                      <span className="payment-label">Atas Nama:</span>
+                      <span className="payment-value">Herawati Silalahi</span>
+                    </div>
+                    <div className="payment-item">
+                      <span className="payment-label">Nomor Dana:</span>
+                      <span className="payment-value payment-number">081213601297</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label>Upload Bukti Transfer *</label>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="file-input"
+                />
+                {proofFile && (
+                  <div className="file-preview">
+                    <span className="file-name">✓ {proofFile.name}</span>
+                    <button 
+                      type="button"
+                      onClick={() => {
+                        setProofFile(null)
+                        if (fileInputRef.current) {
+                          fileInputRef.current.value = ''
+                        }
+                      }}
+                      className="remove-file-btn"
+                    >
+                      Hapus
+                    </button>
+                  </div>
+                )}
+                <small className="file-hint">Format: JPG, PNG, atau GIF (Maks. 5MB)</small>
+              </div>
 
               <div className="order-summary">
-                <h3>Order Summary</h3>
+                <h3>Ringkasan Pesanan</h3>
                 {selectedTicket ? (
                   <>
                     <div className="summary-row">
                       <span>{selectedTicket.name} x {quantity}</span>
-                      <span>${total}</span>
+                      <span>{formatPrice(selectedTicket.price)}</span>
                     </div>
                     <div className="summary-row total">
                       <span>Total</span>
-                      <span>${total}</span>
+                      <span>{formatPrice(total)}</span>
                     </div>
                   </>
                 ) : (
-                  <p className="no-selection">Please select a ticket type</p>
+                  <p className="no-selection">Silakan pilih jenis tiket</p>
                 )}
               </div>
 
               <button 
                 type="submit" 
                 className="btn btn-primary btn-large"
-                disabled={!selectedTicket}
+                disabled={!selectedTicket || isSubmitting}
               >
-                Complete Purchase
+                {isSubmitting ? 'Memproses...' : 'Selesaikan Pembelian'}
               </button>
             </form>
           </section>

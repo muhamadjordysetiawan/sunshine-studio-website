@@ -1,54 +1,42 @@
 import './Actors.css'
+import jordyPhoto from '../assets/actors/jordy.jpg'
+import keyshaPhoto from '../assets/actors/keysha-zalfa.jpg'
+import alyaPhoto from '../assets/actors/alya-zahra.jpg'
 
 const Actors = () => {
   const actors = [
     {
       id: 1,
-      name: 'Sarah Johnson',
-      role: 'Lead Actress',
-      bio: 'Sarah brings over 10 years of theater experience to Sunshine Studio. Her powerful performances and emotional depth have captivated audiences across multiple productions.',
-      image: '👩‍🎭',
-      highlights: ['Award-winning performer', 'Classical training', 'Passionate storyteller']
+      name: 'Muhamad Jordy Setiawan',
+      image: '👨‍🎭',
+      photo: jordyPhoto
     },
     {
       id: 2,
-      name: 'Michael Chen',
-      role: 'Lead Actor',
-      bio: 'Michael is known for his versatility and dynamic stage presence. He has starred in numerous productions and brings a unique energy to every role.',
-      image: '👨‍🎭',
-      highlights: ['Versatile performer', 'Dynamic presence', '15+ productions']
+      name: 'Keysha Zalfa',
+      image: '👩‍🎭',
+      photo: keyshaPhoto
     },
     {
       id: 3,
-      name: 'Emma Rodriguez',
-      role: 'Supporting Actress',
-      bio: 'Emma\'s natural talent and dedication to her craft shine through in every performance. She brings authenticity and warmth to her characters.',
-      image: '👩',
-      highlights: ['Rising star', 'Natural talent', 'Authentic performances']
+      name: 'Ebho Ayey',
+      image: '👨'
     },
     {
       id: 4,
-      name: 'David Thompson',
-      role: 'Supporting Actor',
-      bio: 'David combines comedic timing with dramatic depth, making him a favorite among audiences. His commitment to character development is unmatched.',
-      image: '👨',
-      highlights: ['Comedic timing', 'Character depth', 'Audience favorite']
+      name: 'iqbal padma',
+      image: '👨‍🦱'
     },
     {
       id: 5,
-      name: 'Olivia Martinez',
-      role: 'Ensemble',
-      bio: 'Olivia brings fresh energy and enthusiasm to the stage. Her passion for theater is evident in every performance, and she\'s quickly becoming a standout talent.',
-      image: '👩‍🦰',
-      highlights: ['Fresh talent', 'Energetic performer', 'Rapidly growing']
+      name: 'alya zahra',
+      image: '👩',
+      photo: alyaPhoto
     },
     {
       id: 6,
-      name: 'James Wilson',
-      role: 'Ensemble',
-      bio: 'James is a dedicated ensemble member who brings strength and harmony to group performances. His attention to detail enhances every production.',
-      image: '👨‍🦱',
-      highlights: ['Team player', 'Strong vocals', 'Detail-oriented']
+      name: 'Keyla Digail',
+      image: '👩‍🦰'
     }
   ]
 
@@ -57,16 +45,16 @@ const Actors = () => {
       <div className="actors-hero">
         <div className="container">
           <h1>Meet Our Actors</h1>
-          <p>The talented cast bringing our January production to life</p>
+          <p>Para aktor berbakat yang membawakan pertunjukan Rapunzel dan Aladdin</p>
         </div>
       </div>
 
       <div className="container actors-container">
         <section className="cast-intro">
           <p className="intro-text">
-            Our cast is comprised of incredibly talented performers who bring passion, 
-            dedication, and artistry to every show. Each actor brings their unique 
-            perspective and skills to create unforgettable characters and moments on stage.
+            Tim aktor kami terdiri dari para performer berbakat yang membawa semangat, 
+            dedikasi, dan seni ke setiap pertunjukan. Setiap aktor membawa perspektif 
+            dan keahlian unik mereka untuk menciptakan karakter dan momen yang tak terlupakan di panggung.
           </p>
         </section>
 
@@ -74,29 +62,22 @@ const Actors = () => {
           {actors.map(actor => (
             <div key={actor.id} className="actor-card">
               <div className="actor-image">
-                <div className="actor-emoji">{actor.image}</div>
+                {actor.photo ? (
+                  <img 
+                    src={actor.photo} 
+                    alt={actor.name} 
+                    className="actor-photo"
+                  />
+                ) : (
+                  <div className="actor-emoji">{actor.image}</div>
+                )}
               </div>
               <div className="actor-info">
                 <h3>{actor.name}</h3>
-                <p className="actor-role">{actor.role}</p>
-                <p className="actor-bio">{actor.bio}</p>
-                <div className="actor-highlights">
-                  {actor.highlights.map((highlight, idx) => (
-                    <span key={idx} className="highlight-tag">{highlight}</span>
-                  ))}
-                </div>
               </div>
             </div>
           ))}
         </div>
-
-        <section className="cast-cta">
-          <h2>Experience Their Talent Live</h2>
-          <p>Don't miss the opportunity to see these incredible performers on stage this January!</p>
-          <a href="/tickets" className="btn btn-primary btn-large">
-            Get Your Tickets
-          </a>
-        </section>
       </div>
     </div>
   )

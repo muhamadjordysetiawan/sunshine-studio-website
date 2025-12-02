@@ -1,0 +1,9 @@
+# EmailJS Configuration
+VITE_EMAILJS_SERVICE_ID=isi_service_id_dari_emailjs
+VITE_EMAILJS_TEMPLATE_ID=isi_template_id_dari_emailjs
+VITE_EMAILJS_PUBLIC_KEY=isi_public_key_dari_emailjs
+
+# Google Apps Script Web App URL
+VITE_GOOGLE_APPS_SCRIPT_URL=https://script.google.com/macros/s/AKfycbwR-PoV2ekBVDAYmBVK7N0mptes_M3OZAVXmawZ80XIHLa8kUSJgoHa1rZbZlS5PsKX/exec
+
+
